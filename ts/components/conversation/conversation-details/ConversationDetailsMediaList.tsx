@@ -19,7 +19,8 @@ export type Props = {
   showAllMedia: () => void;
   showLightboxForMedia: (
     selectedMediaItem: MediaItemType,
-    media: Array<MediaItemType>
+    media: Array<MediaItemType>,
+    allowScroll: boolean
   ) => void;
 };
 
@@ -65,7 +66,7 @@ export const ConversationDetailsMediaList: React.ComponentType<Props> = ({
             key={`${mediaItem.message.id}-${mediaItem.index}`}
             mediaItem={mediaItem}
             i18n={i18n}
-            onClick={() => showLightboxForMedia(mediaItem, mediaItems)}
+            onClick={() => showLightboxForMedia(mediaItem, mediaItems, true)}
           />
         ))}
       </div>

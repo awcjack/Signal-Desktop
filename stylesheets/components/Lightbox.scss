@@ -257,6 +257,16 @@
       }
     }
 
+    &--scroll {
+      &::before {
+        transform: scaleX(-1);
+        @include color-svg(
+          '../images/icons/v2/message-solid-24.svg',
+          $color-gray-15
+        );
+      }
+    }
+
     &--forward {
       &::before {
         transform: scaleX(-1);

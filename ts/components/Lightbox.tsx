@@ -34,6 +34,7 @@ export type PropsType = {
     message: MessageAttributesType;
     index: number;
   }) => void;
+  onScroll?: (messageID: string) => void;
   selectedIndex?: number;
 };
 
@@ -60,6 +61,7 @@ export function Lightbox({
   isViewOnce = false,
   onForward,
   onSave,
+  onScroll,
   selectedIndex: initialSelectedIndex = 0,
 }: PropsType): JSX.Element | null {
   const [root, setRoot] = React.useState<HTMLElement | undefined>();
@@ -156,6 +158,17 @@ export function Lightbox({
     close();
     const mediaItem = media[selectedIndex];
     onForward?.(mediaItem.message.id);
+  };
+
+  const handleScroll = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    close();
+    const mediaItem = media[selectedIndex];
+    onScroll?.(mediaItem.message.id);
   };
 
   const onKeyDown = useCallback(
@@ -553,6 +566,14 @@ export function Lightbox({
                   <div />
                 )}
                 <div className="Lightbox__controls">
+                  {onScroll ? (
+                    <button
+                      aria-label={i18n('scrollToMessage')}
+                      className="Lightbox__button Lightbox__button--scroll"
+                      onClick={handleScroll}
+                      type="button"
+                    />
+                  ) : null}
                   {onForward ? (
                     <button
                       aria-label={i18n('forwardMessage')}

@@ -1664,7 +1664,7 @@ export class ConversationView extends window.Backbone.View<ConversationModel> {
           case 'media': {
             const selectedMedia =
               media.find(item => attachment.path === item.path) || media[0];
-            this.showLightboxForMedia(selectedMedia, media);
+            this.showLightboxForMedia(selectedMedia, media, true);
             break;
           }
 
@@ -2020,7 +2020,8 @@ export class ConversationView extends window.Backbone.View<ConversationModel> {
 
   showLightboxForMedia(
     selectedMediaItem: MediaItemType,
-    media: Array<MediaItemType> = []
+    media: Array<MediaItemType> = [],
+    allowScroll = false
   ): void {
     const onSave = async ({
       attachment,
@@ -2048,6 +2049,13 @@ export class ConversationView extends window.Backbone.View<ConversationModel> {
       }
     };
 
+    const onScroll = (messageId: string) => {
+      this.resetPanel();
+      // View All Media will have two panel
+      this.resetPanel();
+      this.scrollToMessage(messageId);
+    };
+
     const selectedIndex = media.findIndex(
       mediaItem =>
         mediaItem.attachment.path === selectedMediaItem.attachment.path
@@ -2066,6 +2074,7 @@ export class ConversationView extends window.Backbone.View<ConversationModel> {
         media,
         onForward: this.showForwardMessageModal.bind(this),
         onSave,
+        onScroll: allowScroll ? onScroll : undefined,
         selectedIndex: selectedIndex >= 0 ? selectedIndex : 0,
       },
       onClose: () => window.Signal.Backbone.Views.Lightbox.hide(),
